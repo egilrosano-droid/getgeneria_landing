@@ -147,6 +147,15 @@ document.addEventListener("DOMContentLoaded", () => {
         return o && v ? `${o.value} · ${v.value}` : "";
     };
 
+    // Lo que la persona escribe se muestra en el resumen con innerHTML: se escapa para que no se interprete como HTML.
+    const esc = (value) =>
+        String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+
     const updateResumen = () => {
         if (!resumenContent) return;
         const nombre = document.getElementById("nombre")?.value || "";
@@ -156,12 +165,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const tiempo = document.getElementById("tiempo");
         const tiempoText = tiempo?.options[tiempo.selectedIndex]?.text || "";
         resumenContent.innerHTML = `
-            <strong>Nombre:</strong> ${nombre}<br>
-            <strong>Producto:</strong> ${tipo}<br>
-            <strong>Email:</strong> ${email}<br>
-            <strong>Enfoque:</strong> ${getDiagnosticoText()}<br>
-            <strong>Alcance:</strong> ${alcance}<br>
-            <strong>Lanzamiento:</strong> ${tiempoText}
+            <strong>Nombre:</strong> ${esc(nombre)}<br>
+            <strong>Producto:</strong> ${esc(tipo)}<br>
+            <strong>Email:</strong> ${esc(email)}<br>
+            <strong>Enfoque:</strong> ${esc(getDiagnosticoText())}<br>
+            <strong>Alcance:</strong> ${esc(alcance)}<br>
+            <strong>Lanzamiento:</strong> ${esc(tiempoText)}
         `;
     };
 
